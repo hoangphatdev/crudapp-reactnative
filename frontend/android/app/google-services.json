@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "51109781909",
+    "project_id": "test-b94f1",
+    "storage_bucket": "test-b94f1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51109781909:android:a4c1e5977de22b351cd69c",
+        "android_client_info": {
+          "package_name": "hplat.crud"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkjxSXl0QI1_jABNuqQ62e0Yh8ZJmBmfY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
