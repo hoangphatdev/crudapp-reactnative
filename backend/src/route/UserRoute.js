@@ -1,26 +1,20 @@
 import express from "express";
-const router = express.Router();
+import {
+  createUserWithoutImage,
+  createUserWithImage,
+  getUsers,
+  login,
+  deleteOneUser,
+} from "../controller/UserController.js";
+const route = express.Router();
 
-router.post("/users", async (req, res) => {
-  try {
-    const { username, email, password, image } = req.body;
-    if (!image) return res.status(400).json({ message: "Thiếu ảnh" });
+route.route("/users").get(getUsers);
 
-    const uploadRes = await cloudinary.v2.uploader.upload(
-      `data:image/jpeg;base64,${image}`,
-      { folder: "users" }
-    );
+route.route("/signup/").post(createUserWithoutImage);
 
-    const newUser = await User.create({
-      username,
-      email,
-      password,
-      imageUrl: uploadRes.secure_url,
-    });
+route.post("/login", login);
 
-    res.json({ message: "Tạo user thành công", user: newUser });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Lỗi server" });
-  }
-});
+route.delete("/users/:id", deleteOneUser);
+route.post("/users", createUserWithImage );
+
+export default route;
