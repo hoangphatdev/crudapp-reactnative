@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 
-const API_URL = 'http://10.0.2.2:5000';
+import { globalVar } from '../config/globalVar';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -27,17 +27,38 @@ const LoginScreen = ({ navigation }) => {
     }
     try {
       setLoading(true);
-      const res = await axios.post(`${API_URL}/login`, { email, password });
+      const res = await axios.post(`${globalVar.API_URL}/login`, {
+        email,
+        password,
+      });
 
       Alert.alert('Sucessfully', 'Login sucessfully!');
-      console.log('User:', res.data.user);
-
-      navigation.replace('Home');
+      if (email == 'admin@gmail.com') {
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'Home',
+              params: { role: 'admin' },
+            },
+          ],
+        });
+      } else {
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'Home',
+              params: { role: 'client' },
+            },
+          ],
+        });
+      }
     } catch (err) {
       console.error('Login error:', err.message);
       Alert.alert(
-        'Đăng nhập thất bại',
-        err.response?.data?.message || 'Sai email hoặc mật khẩu.',
+        'Login failed',
+        err.response?.data?.message || 'Wrong email or password.',
       );
     } finally {
       setLoading(false);
@@ -46,7 +67,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Đăng nhập</Text>
+      <Text style={styles.title}>Login</Text>
 
       <TextInput
         style={styles.input}
@@ -59,19 +80,16 @@ const LoginScreen = ({ navigation }) => {
 
       <TextInput
         style={styles.input}
-        placeholder="Mật khẩu"
+        placeholder="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
 
-      <Button
-        title={loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
-        onPress={handleLogin}
-      />
+      <Button title={loading ? 'Loading...' : 'Login'} onPress={handleLogin} />
 
-      <TouchableOpacity onPress={() => navigation.navigate('CreateUser')}>
-        <Text style={styles.link}>Chưa có tài khoản? Đăng ký</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+        <Text style={styles.link}>Dont have account? Sign Up</Text>
       </TouchableOpacity>
     </View>
   );

@@ -11,9 +11,8 @@ import {
   Alert,
 } from 'react-native';
 import axios from 'axios';
+import { globalVar } from '../config/globalVar';
 import { launchImageLibrary } from 'react-native-image-picker';
-
-const API_URL = 'http://10.0.2.2:5000/users'; // backend của bạn
 
 const EditUserScreen = ({ route, navigation }) => {
   const { user } = route.params;
@@ -38,11 +37,11 @@ const EditUserScreen = ({ route, navigation }) => {
 
   const handleUpdate = async () => {
     try {
-      const res = await axios.put(`${API_URL}/${user._id}`, {
+      const res = await axios.put(`${globalVar.API_URL}/users/${user._id}`, {
         username,
         email,
         password,
-        image: imageBase64, // nếu không chọn ảnh mới thì backend giữ ảnh cũ
+        image: imageBase64,
       });
 
       Alert.alert('Thành công', 'Cập nhật user thành công!');
@@ -55,20 +54,23 @@ const EditUserScreen = ({ route, navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Chỉnh sửa người dùng</Text>
+      <Text style={styles.title}>Edit User Information</Text>
 
+      <Text style={{ fontWeight: 'bold' }}>Username</Text>
       <TextInput
         style={styles.input}
         value={username}
         onChangeText={setUsername}
         placeholder="Username"
       />
+      <Text style={{ fontWeight: 'bold' }}>Email</Text>
       <TextInput
         style={styles.input}
         value={email}
         onChangeText={setEmail}
         placeholder="Email"
       />
+      <Text style={{ fontWeight: 'bold' }}>Password</Text>
       <TextInput
         style={styles.input}
         value={password}
@@ -85,7 +87,7 @@ const EditUserScreen = ({ route, navigation }) => {
         )}
       </TouchableOpacity>
 
-      <Button title="Cập nhật" onPress={handleUpdate} />
+      <Button title="Update" onPress={handleUpdate} />
     </ScrollView>
   );
 };

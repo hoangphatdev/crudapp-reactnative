@@ -10,33 +10,32 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
-
-const API_URL = 'http://10.0.2.2:5000/users'; // backend Express của bạn
+import { globalVar } from '../config/globalVar';
 
 const UserListScreen = ({ navigation }) => {
   const [users, setUsers] = useState([]);
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get(API_URL);
+      const res = await axios.get(`${globalVar.API_URL}/users`);
       setUsers(res.data);
     } catch (err) {
-      console.error('Lỗi tải users:', err.message);
+      console.error('Loading users error:', err.message);
     }
   };
 
   const deleteUser = async id => {
-    Alert.alert('Xác nhận', 'Bạn có chắc muốn xóa user này?', [
-      { text: 'Hủy' },
+    Alert.alert('Submit', 'You want to delete this user, dont you?', [
+      { text: 'Cancel' },
       {
-        text: 'Xóa',
+        text: 'Delete',
         style: 'destructive',
         onPress: async () => {
           try {
-            await axios.delete(`${API_URL}/${id}`);
+            await axios.delete(`${globalVar.API_URL}/users/${id}`);
             fetchUsers();
           } catch (err) {
-            console.error('Lỗi xóa user:', err.message);
+            console.error('Deleting user error:', err.message);
           }
         },
       },
@@ -44,20 +43,34 @@ const UserListScreen = ({ navigation }) => {
   };
 
   const editUser = user => {
-    // Truyền user qua màn hình Edit
     navigation.navigate('EditUser', { user });
   };
 
+  const navigateToCreateScreen = () => {
+    navigation.navigate('Create');
+  };
+
+  const navigateToHome = () => {
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: 'Home',
+          params: { role: 'admin' },
+        },
+      ],
+    });
+  };
   useEffect(() => {
     fetchUsers();
   }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Danh sách người dùng</Text>
+      <Text style={styles.title}>User List</Text>
 
       {users.length === 0 ? (
-        <Text style={{ color: 'gray' }}>Chưa có user nào.</Text>
+        <Text style={{ color: 'gray' }}>Dont have any user.</Text>
       ) : (
         users.map(user => (
           <View key={user._id} style={styles.card}>
@@ -88,6 +101,34 @@ const UserListScreen = ({ navigation }) => {
           </View>
         ))
       )}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 20,
+          right: 20,
+          backgroundColor: 'rgba(0,0,0,0.3)',
+          padding: 10,
+          borderRadius: 8,
+        }}
+      >
+        <TouchableOpacity onPress={navigateToCreateScreen}>
+          <Text style={{ color: 'white' }}>Add User</Text>
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 20,
+          left: 20,
+          backgroundColor: 'rgba(0,0,0,0.3)',
+          padding: 10,
+          borderRadius: 8,
+        }}
+      >
+        <TouchableOpacity onPress={navigateToHome}>
+          <Text style={{ color: 'white' }}>Home</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
