@@ -1,20 +1,20 @@
-import express from "express";
-import {
-  createEmployee,
-  getEmployees,
-  getEmployee,
-  updateEmployee,
-  deleteEmployee,
-} from "../controller/EmployeeController.js";
+// import express from "express";
+// import {
+//   createEmployee,
+//   getEmployees,
+//   getEmployee,
+//   updateEmployee,
+//   deleteEmployee,
+// } from "../controller/EmployeeController.js";
 
-const router = express.Router();
+// const router = express.Router();
 
-router.route("/").get(getEmployees).post(createEmployee);
+// router.route("/").get(getEmployees).post(createEmployee);
 
-router
-  .route("/:id")
-  .get(getEmployee)
-  .put(updateEmployee)
-  .delete(deleteEmployee);
+// router
+//   .route("/:id")
+//   .get(getEmployee)
+//   .put(updateEmployee)
+//   .delete(deleteEmployee);
 
-export default router;
+// export default router;

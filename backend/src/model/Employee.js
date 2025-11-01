@@ -1,29 +1,28 @@
-import mongoose from "mongoose";
 
-const employeeSchema = new mongoose.Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    image: {
-      type: String,
-      default: "",
-    },
-  },
-  { timestamps: true }
-);
+// const employeeSchema = new mongoose.Schema(
+//   {
+//     username: {
+//       type: String,
+//       required: true,
+//       trim: true,
+//     },
+//     email: {
+//       type: String,
+//       required: true,
+//       unique: true,
+//       lowercase: true,
+//     },
+//     password: {
+//       type: String,
+//       required: true,
+//     },
+//     image: {
+//       type: String,
+//       default: "",
+//     },
+//   },
+//   { timestamps: true }
+// );
 
-const model = mongoose.model("Employee", employeeSchema);
-export default model;
+// const model = mongoose.model("Employee", employeeSchema);
+// export default model;
