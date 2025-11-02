@@ -47,7 +47,7 @@ const UserListScreen = ({ navigation }) => {
   };
 
   const navigateToCreateScreen = () => {
-    navigation.navigate('Create');
+    navigation.replace('Create');
   };
 
   const navigateToHome = () => {

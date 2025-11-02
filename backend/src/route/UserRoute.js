@@ -1,20 +1,21 @@
 import express from "express";
 import {
-  createUserWithoutImage,
+  login,
+  signup,
   createUserWithImage,
   getUsers,
-  login,
-  deleteOneUser,
+  getUser,
+  deleteUser,
+  updateUser,
 } from "../controller/UserController.js";
 const route = express.Router();
 
-route.route("/users").get(getUsers);
-
-route.route("/signup/").post(createUserWithoutImage);
-
+route.route("/signup/").post(signup);
 route.post("/login", login);
 
-route.delete("/users/:id", deleteOneUser);
-route.post("/users", createUserWithImage );
+route.route("/users").get(getUsers).post(createUserWithImage);
+route.route("/users/:id").delete(deleteUser).put(updateUser);
+
+route.route("/user").post(getUser);
 
 export default route;

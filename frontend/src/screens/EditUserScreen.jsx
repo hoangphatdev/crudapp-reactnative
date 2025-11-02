@@ -18,7 +18,6 @@ const EditUserScreen = ({ route, navigation }) => {
   const { user } = route.params;
 
   const [username, setUsername] = useState(user.username);
-  const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState(user.password || '');
   const [imageUri, setImageUri] = useState(user.imageUrl);
   const [imageBase64, setImageBase64] = useState(null);
@@ -37,15 +36,26 @@ const EditUserScreen = ({ route, navigation }) => {
 
   const handleUpdate = async () => {
     try {
-      const res = await axios.put(`${globalVar.API_URL}/users/${user._id}`, {
-        username,
-        email,
-        password,
-        image: imageBase64,
-      });
+      const updateData = {email: user.email};
+      if (username !== user.username) {
+        updateData.username = username;
+      };
+      if (password !== user.password) {
+        updateData.password = password;
+      };
+      if (imageUri !== user.imageUrl) {
+        updateData.imageUrl = imageBase64;
+      };
+
+      const res = await axios.put(`${globalVar.API_URL}/users/${user._id}`, updateData);
 
       Alert.alert('Thành công', 'Cập nhật user thành công!');
-      navigation.goBack();
+      navigation.reset({
+        index: 0,
+        routes: [{
+          name : "UserList",
+        }]
+      });
     } catch (err) {
       console.error('Lỗi update:', err.message);
       Alert.alert('Lỗi', 'Không thể cập nhật user.');
@@ -63,13 +73,6 @@ const EditUserScreen = ({ route, navigation }) => {
         onChangeText={setUsername}
         placeholder="Username"
       />
-      <Text style={{ fontWeight: 'bold' }}>Email</Text>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Email"
-      />
       <Text style={{ fontWeight: 'bold' }}>Password</Text>
       <TextInput
         style={styles.input}
@@ -83,7 +86,7 @@ const EditUserScreen = ({ route, navigation }) => {
         {imageUri ? (
           <Image source={{ uri: imageUri }} style={styles.imagePreview} />
         ) : (
-          <Text style={{ color: 'gray' }}>Chọn ảnh mới</Text>
+          <Text style={{ color: 'gray' }}>Choose new image</Text>
         )}
       </TouchableOpacity>
 

@@ -1,24 +1,31 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const HomeScreen = ({ navigation, route }) => {
+  const [role, setRole] = useState('');
+  const { username, email, password, imageUrl } = useSelector(
+    state => state.user,
+  );
+
+  useEffect(() => {
+    if (email === 'admin@gmail.com') {
+      setRole('admin');
+    } else {
+      setRole('client');
+    }
+  }, []);
+
   const navigateToListScreen = () => {
     navigation.replace('UserList');
   };
   const navigateToProfileScreen = () => {
-    navigation.replace('Profile');
+    navigation.replace('Profile', { emailProp: email });
   };
 
-  const [role, setRole] = useState('');
-  useEffect(() => {
-    const { role } = route.params;
-    setRole(role);
-    console.log(role);
-  }, []);
-
   return (
-    <View style={{ flex: 1 }}>
-      <Text>This is home screen</Text>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={{ fontSize: 25, fontWeight: 'bold' }}>Hello {username}</Text>
       {role == 'admin' ? (
         <View
           style={{
@@ -31,7 +38,7 @@ const HomeScreen = ({ navigation, route }) => {
           }}
         >
           <TouchableOpacity onPress={navigateToListScreen}>
-            <Text style={{ color: 'white' }}>UserList</Text>
+            <Text style={{ color: 'black' }}>UserList</Text>
           </TouchableOpacity>
         </View>
       ) : null}
@@ -47,7 +54,7 @@ const HomeScreen = ({ navigation, route }) => {
         }}
       >
         <TouchableOpacity onPress={navigateToProfileScreen}>
-          <Text style={{ color: 'white' }}>Profile</Text>
+          <Text style={{ color: 'black' }}>Profile</Text>
         </TouchableOpacity>
       </View>
     </View>

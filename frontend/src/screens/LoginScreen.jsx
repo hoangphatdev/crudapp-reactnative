@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../utils/userSlice';
+import axios from 'axios';
 import {
   View,
   Text,
@@ -8,16 +11,18 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import axios from 'axios';
 
 import { globalVar } from '../config/globalVar';
 
 const LoginScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    console.log(`${globalVar.API_URL}/login`);
+
     if (!email || !password) {
       Alert.alert(
         'Missing information',
@@ -31,25 +36,53 @@ const LoginScreen = ({ navigation }) => {
         email,
         password,
       });
-
-      Alert.alert('Sucessfully', 'Login sucessfully!');
+      const { user } = res.data;
+      // const { username, email, password, imageUrl } = user;
       if (email == 'admin@gmail.com') {
+        dispatch(
+          setUser({
+            username: user.username,
+            email: user.email,
+            password: user.password,
+            imageUrl: user.imageUrl,
+          }),
+        );
         navigation.reset({
           index: 0,
           routes: [
             {
               name: 'Home',
-              params: { role: 'admin' },
+              params: {
+                role: 'admin',
+                username: user.username,
+                password: user.password,
+                email: user.email,
+                imageUrl: user.imageUrl,
+              },
             },
           ],
         });
       } else {
+        dispatch(
+          setUser({
+            username: user.username,
+            email: user.email,
+            password: user.password,
+            imageUrl: user.imageUrl,
+          }),
+        );
         navigation.reset({
           index: 0,
           routes: [
             {
               name: 'Home',
-              params: { role: 'client' },
+              params: {
+                role: 'client',
+                username: user.username,
+                password: user.password,
+                email: user.email,
+                imageUrl: user.imageUrl,
+              },
             },
           ],
         });

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  View,
   Text,
   TextInput,
   Button,
@@ -53,9 +52,9 @@ const CreateUserScreen = ({ navigation }) => {
     try {
       setLoading(true);
       const res = await axios.post(`${globalVar.API_URL}/users`, {
-        username,
-        email,
-        password,
+        username: username,
+        email: email,
+        password: password,
         image: imageBase64,
       });
       Alert.alert('Successfully', 'Created account!');
@@ -65,6 +64,7 @@ const CreateUserScreen = ({ navigation }) => {
       setEmail('');
       setPassword('');
       setImageUri(null);
+      navigation.replace('UserList');
     } catch (error) {
       console.error('Lỗi:', error.message);
       Alert.alert('Lỗi', 'Cannot create account.');
@@ -90,7 +90,6 @@ const CreateUserScreen = ({ navigation }) => {
         />
       ) : null}
       <Text style={styles.title}>Create new user</Text>
-
       <Text>Username</Text>
       <TextInput
         style={styles.input}
@@ -122,7 +121,6 @@ const CreateUserScreen = ({ navigation }) => {
           <Text style={{ color: 'gray' }}>Choose image</Text>
         )}
       </TouchableOpacity>
-
       <Button title="Create account" onPress={handleSubmit} />=
     </ScrollView>
   );
